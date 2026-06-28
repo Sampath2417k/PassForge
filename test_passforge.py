@@ -28,7 +28,7 @@ def test_basic_generation():
 
 def test_custom_length():
     """Test custom password length."""
-    stdout, stderr, code = run_command('python passforge.py -l 20')
+    stdout, stderr, code = run_command("python passforge.py -l 20")
     assert code == 0
     assert len(stdout) == 20
 
@@ -70,6 +70,46 @@ def test_help():
     assert "usage:" in stdout.lower()
 
 
+def test_passphrase_generation():
+    """Test basic passphrase generation."""
+    stdout, stderr, code = run_command("python passforge.py -p 6")
+    assert code == 0
+    passphrase = stdout.strip()
+    words = passphrase.split('-')
+    assert len(words) == 6
+
+
+def test_passphrase_capitalized():
+    """Test capitalized passphrase."""
+    stdout, stderr, code = run_command("python passforge.py -p 4 -C")
+    assert code == 0
+    passphrase = stdout.strip()
+    words = passphrase.split('-')
+    assert len(words) == 4
+    for word in words:
+        assert word[0].isupper()
+
+
+def test_passphrase_custom_separator():
+    """Test custom separator."""
+    stdout, stderr, code = run_command("python passforge.py -p 3 -s _")
+    assert code == 0
+    passphrase = stdout.strip()
+    words = passphrase.split('_')
+    assert len(words) == 3
+
+
+def test_passphrase_exclude_words():
+    """Test exclude words."""
+    stdout, stderr, code = run_command('python passforge.py -p 3 --exclude-words "abandon ability"')
+    assert code == 0
+    passphrase = stdout.strip()
+    words = passphrase.split('-')
+    assert len(words) == 3
+    assert "abandon" not in words
+    assert "ability" not in words
+
+
 if __name__ == "__main__":
     tests = [
         ("Basic generation", test_basic_generation),
@@ -78,6 +118,10 @@ if __name__ == "__main__":
         ("Batch generation", test_batch_generation),
         ("Exclude characters", test_exclude_chars),
         ("Help option", test_help),
+        ("Passphrase generation", test_passphrase_generation),
+        ("Passphrase capitalized", test_passphrase_capitalized),
+        ("Passphrase custom separator", test_passphrase_custom_separator),
+        ("Passphrase exclude words", test_passphrase_exclude_words),
     ]
 
     for name, test_func in tests:
