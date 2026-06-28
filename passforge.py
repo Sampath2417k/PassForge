@@ -227,7 +227,7 @@ examples:
   passforge -p 6               # Generate 6-word passphrase
   passforge -p 8 -s _ -c 3    # Three 8-word passphrases with underscores
   passforge -p 4 -C            # Four capitalized words
-  passforge -p 8 "common dribble fatal matrix grammar"  # Exclude words""",
+  passforge -p 3 --exclude-words "abandon ability"  # Exclude words""",
     )
     parser.add_argument(
         "-l", "--length", type=int, default=16, help="Password length (default: 16)"
