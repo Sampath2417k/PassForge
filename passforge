@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# PassForge Shell Script Wrapper
+# 
+# This script provides an easy way to use PassForge from the command line
+# without having to remember the full python command.
+#
+# Usage:
+#   passforge              # Generate a password
+#   passforge -l 32        # Generate a 32-char password
+#   passforge -p 6         # Generate a 6-word passphrase
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYTHON_SCRIPT="$SCRIPT_DIR/passforge.py"
+
+if [ ! -f "$PYTHON_SCRIPT" ]; then
+    echo "Error: passforge.py not found at $PYTHON_SCRIPT" >&2
+    echo "Please install PassForge properly or run it directly: python passforge.py" >&2
+    exit 1
+fi
+
+# Execute the Python script with all arguments passed to this script
+exec python "$PYTHON_SCRIPT" "$@"
